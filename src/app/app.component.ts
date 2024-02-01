@@ -1,45 +1,42 @@
-import { Component } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'formArray';
-  form = this.fb.group({
-    lessons: this.fb.array([])
-  });
-  formOptions = [
-    { value: 'one', name: 'one' },
-    { value: 'two', name: 'two' },
-    { value: 'three', name: 'three' }
+
+  form!: FormGroup
+  formOption = [
+    {name: 'user one'},
+    {name: 'user two'},
+    {name: 'user three'},
   ]
-  currentVal: string[] = [];
+
   constructor(private fb: FormBuilder) { }
 
-  get lessons() {
-    return this.form.controls['lessons'] as any;
+  ngOnInit(): void {
+    this.form = this.fb.group({
+      users: this.fb.array([])
+    })
+
+    this.users.valueChanges.subscribe(value => {
+      console.log(value)
+    })
   }
-
-  addLesson() {
-    const lessonForm = this.fb.group({
-      level: ['', Validators.required],
-    });
-
-    this.lessons.push(lessonForm);
+  get users() {
+    return this.form.get('users') as FormArray;
   }
-
-  deleteLesson(lessonIndex: number) {
-    this.lessons.removeAt(lessonIndex);
-    this.currentVal.splice(lessonIndex, 1)[0];
+  add() {
+    const userForm = this.fb.group({
+      user: ['', Validators.required]
+    })
+    this.users.push(userForm)
   }
-
-  current({ target }: any) {
-    if (!this.currentVal.includes(target.value)) {
-      this.currentVal.push(target.value);
-    }
+  getFormControls(index: number) {
+    return (this.users.controls[index] as FormGroup).controls;
   }
-
 }

@@ -1,16 +1,13 @@
-<div [formGroup]="form">
-  <ng-container formArrayName="lessons">
-    <ng-container *ngFor="let lessonForm of lessons.controls; let i = index">
-      <div [formGroup]="lessonForm">
-        <div>
-          <select formControlName="level" (change)="current($event)" >
-            <option *ngFor="let options of formOptions" [value]="options.value"
-              [hidden]="currentVal.includes(options.value)">{{options.name}}</option>
-          </select>
-          <button (click)=" deleteLesson(i)">delete</button>
-        </div>
+<div class="container">
+  <h1>{{title}}</h1>
+  <form [formGroup]="form">
+    <div formArrayName="users">
+      <div *ngFor="let userGroup of users.controls; let i = index" [formGroupName]="i">
+        <select formControlName="user">
+          <option *ngFor="let option of formOption; let j = index" [value]="j">{{option.name}}</option>
+        </select>
       </div>
-    </ng-container>
-  </ng-container>
-  <button (click)="addLesson()" [disabled]="lessons.length >= 3">add</button>
+    </div>
+  </form>
+  <button (click)="add()" [disabled]="users.controls.length >= 3">add</button>
 </div>
