@@ -9,12 +9,13 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 export class AppComponent implements OnInit {
   title = 'formArray';
 
-  form!: FormGroup
+  form!: FormGroup;
   formOption = [
-    {name: 'user one'},
-    {name: 'user two'},
-    {name: 'user three'},
-  ]
+    { name: 'user one' },
+    { name: 'user two' },
+    { name: 'user three' },
+  ];
+  selectedUsers: string[] = []
 
   constructor(private fb: FormBuilder) { }
 
@@ -24,7 +25,9 @@ export class AppComponent implements OnInit {
     })
 
     this.users.valueChanges.subscribe(value => {
-      console.log(value)
+      for (let data of value) {
+        if (data.user) this.selectedUsers.push(data.user)
+      }
     })
   }
   get users() {

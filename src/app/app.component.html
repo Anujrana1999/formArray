@@ -4,7 +4,8 @@
     <div formArrayName="users">
       <div *ngFor="let userGroup of users.controls; let i = index" [formGroupName]="i">
         <select formControlName="user">
-          <option *ngFor="let option of formOption; let j = index" [value]="j">{{option.name}}</option>
+          <option *ngFor="let option of formOption; let j = index" [value]="j" [disabled]="">{{option.name}}
+          </option>
         </select>
       </div>
     </div>
