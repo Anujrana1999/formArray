@@ -53,7 +53,4 @@ export class AppComponent implements OnInit {
     })
     this.users.push(userForm)
   }
-  getFormControls(index: number) {
-    return (this.users.controls[index] as FormGroup).controls;
-  }
 }
