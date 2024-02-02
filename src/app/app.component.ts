@@ -35,7 +35,6 @@ export class AppComponent implements OnInit {
       distinctUntilChanged()
     ).subscribe(value => {
       this.filterFormOption = this.formOption.filter(res => {
-        debugger;
         if (value[0].user) {
           return res.id !== value[0].user;
         } else {
