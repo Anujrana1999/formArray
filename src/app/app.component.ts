@@ -2,6 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 
+interface formOption {
+  id: string,
+  name: string
+}
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -11,12 +16,13 @@ export class AppComponent implements OnInit {
   title = 'formArray';
 
   form!: FormGroup;
-  formOption = [
-    { name: 'user one' },
-    { name: 'user two' },
-    { name: 'user three' },
+  formOption: formOption[] = [
+    { id: '1', name: 'user one' },
+    { id: '2', name: 'user two' },
+    { id: '3', name: 'user three' },
   ];
   selectedUsers: string[] = []
+  filterFormOption: formOption[] = []
 
   constructor(private fb: FormBuilder) { }
 
@@ -26,12 +32,17 @@ export class AppComponent implements OnInit {
     })
 
     this.users.valueChanges.pipe(
-      debounceTime(800),
+      debounceTime(200),
       distinctUntilChanged()
     ).subscribe(value => {
-      for (let data of value) {
-        if (data.user) this.selectedUsers.push(data.user)
-      }
+      this.filterFormOption = this.formOption.filter(res => {
+        debugger;
+        if (value[0].user) {
+          return res.id !== value[0].user;
+        } else {
+          return res;
+        }
+      })
     })
   }
   get users() {
