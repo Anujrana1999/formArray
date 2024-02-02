@@ -21,8 +21,7 @@ export class AppComponent implements OnInit {
     { id: '2', name: 'user two' },
     { id: '3', name: 'user three' },
   ];
-  selectedUsers: string[] = []
-  filterFormOption: formOption[] = []
+  filterFormOption: formOption[] = [];
 
   constructor(private fb: FormBuilder) { }
 
