@@ -1,11 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { debounceTime, distinctUntilChanged } from 'rxjs';
-
-interface formOption {
-  id: string,
-  name: string
-}
+import { debounceTime, distinctUntilChanged, startWith } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -16,35 +11,36 @@ export class AppComponent implements OnInit {
   title = 'formArray';
 
   form!: FormGroup;
-  formOption: formOption[] = [
+  formOption = [
     { id: '1', name: 'user one' },
     { id: '2', name: 'user two' },
     { id: '3', name: 'user three' },
   ];
-  filterFormOption: formOption[] = [];
+  filterFormOption: any[] = [];
 
   constructor(private fb: FormBuilder) { }
 
+  get users() {
+    return this.form.get('users') as FormArray;
+  }
   ngOnInit(): void {
     this.form = this.fb.group({
       users: this.fb.array([])
     })
 
     this.users.valueChanges.pipe(
-      debounceTime(200),
-      distinctUntilChanged()
+      startWith([])
     ).subscribe(value => {
-      this.filterFormOption = this.formOption.filter(res => {
-        if (value[0].user) {
-          return res.id !== value[0].user;
-        } else {
-          return res;
-        }
-      })
+      debugger
+      if (!!this.users?.value?.length) {
+        this.users.value.forEach((element: any, index: any) => {
+          const allSelectedOptions = this.users.value.map((elem: any) => elem.user);
+          this.filterFormOption[index] = [
+            ...this.formOption.filter((elm: any) => !allSelectedOptions.includes(elm.id) || elm.id == element.user)
+          ]
+        });
+      }
     })
-  }
-  get users() {
-    return this.form.get('users') as FormArray;
   }
   add() {
     const userForm = this.fb.group({
